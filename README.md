@@ -60,7 +60,7 @@ npm start
 
 ### 命令行出图
 
-`npm run render` 用同一个页面和同样的检查把 `.oui` 文件渲染成 PNG，供服务器上的其他 Agent 使用，写法和规则见 [AGENT.md](AGENT.md)。
+`npm run render` 用同一个页面和同样的检查把 `.oui` 文件渲染成 PNG，供服务器上的其他 Agent 使用，写法和规则见 [AGENTS.md](AGENTS.md)。
 
 ```sh
 npm run render -- card.oui                 # 生成 card.png，宽 480
