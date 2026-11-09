@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.learnev/
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+agent/.models.lock/
+agent/.new-agent-*/
+agent/.new-models-*/

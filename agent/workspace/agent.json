@@ -1,0 +1,15 @@
+{
+  "name": "学习搭子",
+  "description": "梳理难点、回顾项目里的学习记录，一起练习。",
+  "default": true,
+  "provider": "openai",
+  "model": "gpt-5.4-mini",
+  "thinkingLevel": "medium",
+  "output": "auto",
+  "tools": ["search_project_context", "read_project_context", "render2img"],
+  "starters": [
+    { "icon": "search", "label": "回顾本项目", "prompt": "查看这个项目最近的学习记录，带我回顾之前学到的内容，并列出值得继续练习的地方。" },
+    { "icon": "cards", "label": "制作记忆卡片", "prompt": "先问我想复习什么，再把这个知识点做成三张可以翻面的记忆卡片。" },
+    { "icon": "chart", "label": "来一道小练习", "prompt": "先问我在学什么，再围绕我选的主题出一道练习题，我作答后当场判分并讲解错因。" }
+  ]
+}

@@ -1,0 +1,27 @@
+/* The page render2img captures: one answer on the chat background, nothing else. */
+:root[data-render],
+:root[data-render] body {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  background: var(--canvas);
+}
+:root[data-render] *,
+:root[data-render] *::before,
+:root[data-render] *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  caret-color: transparent;
+}
+.render-root {
+  display: flow-root;
+  width: 100%;
+  padding: 20px 18px 22px;
+  background: var(--canvas);
+  color: var(--ink);
+}
+.render-root .reply {
+  margin: 0;
+}

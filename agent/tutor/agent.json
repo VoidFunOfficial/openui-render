@@ -1,0 +1,14 @@
+{
+  "name": "学习导师",
+  "description": "用可操作的例子、图表和翻转卡片讲解概念。",
+  "provider": "openai",
+  "model": "gpt-5.4-mini",
+  "thinkingLevel": "low",
+  "output": "openui",
+  "tools": ["search_project_context", "read_project_context", "render2img"],
+  "starters": [
+    { "icon": "cards", "label": "用卡片学习二分查找", "prompt": "用三张翻转卡片带我学习二分查找。" },
+    { "icon": "chart", "label": "观察复利如何增长", "prompt": "用可调利率和年数的图表解释复利。" },
+    { "icon": "file", "label": "出一道概率练习题", "prompt": "用一道可交互的概率选择题帮我理解条件概率，回答后给出解释。" }
+  ]
+}
