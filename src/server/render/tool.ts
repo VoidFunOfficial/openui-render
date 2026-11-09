@@ -3,7 +3,7 @@ import { Type } from "typebox";
 import { withBase } from "../../openui/base-path.ts";
 import { toolLabels } from "../../shared/agent-options.ts";
 import type { RenderImage } from "../../shared/types.ts";
-import { renderWidths, type Renderer, type RenderResult } from "./openui-image.ts";
+import { renderProblems, renderWidths, type Renderer, type RenderResult } from "./openui-image.ts";
 import { saveRender } from "./store.ts";
 
 export const maxRendersPerAnswer = 3;
@@ -15,15 +15,7 @@ function summary(result: RenderResult, canSee: boolean) {
       (result.fullHeight > result.height ? `; the page is ${result.fullHeight} px, so the image is cut off at the bottom.` : ".") +
       " The learner sees this image in the chat.",
   ];
-  const problems = [
-    ...(d.hasProgram ? [] : ["No OpenUI program found: the code must contain a line starting with root ="]),
-    ...(d.crashed ? [`The view crashed while rendering: ${d.crashed}`] : []),
-    ...d.errors.map((e) => (e.statementId ? `${e.statementId}: ${e.message}` : e.message)),
-    ...(d.unresolved.length ? [`Referenced but never defined (rendered as nothing): ${d.unresolved.join(", ")}`] : []),
-    ...(d.orphaned.length ? [`Defined but not reachable from root (not shown): ${d.orphaned.join(", ")}`] : []),
-    ...(d.stray?.length ? [`Skipped by the parser because they are outside quotes: ${d.stray.join(" ")}. Put text in quotes and write names, $state and @functions in ASCII.`] : []),
-    ...(d.incomplete ? ["The program is truncated: a statement or bracket is unfinished."] : []),
-  ];
+  const problems = renderProblems(d);
   if (problems.length) lines.push("Fix these problems:", ...problems.map((p) => "- " + p));
   else lines.push(`The parser found no problems in ${d.statementCount} statements.`);
   lines.push(

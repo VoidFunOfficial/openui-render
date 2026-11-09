@@ -32,6 +32,13 @@ npm run dev
 
 打开 [LearnGPT](http://127.0.0.1:3000)。服务绑定回环地址。切换端口可使用 `npm run dev -- --port 3100`。
 
+在服务器上可以用一键安装脚本完成依赖、`.env.local`、无头浏览器、中文字体（Linux）和生产构建，最后渲染一张自检图 `.learnev/install-check.png`。安装系统库和字体需要 root 或免密码 sudo。
+
+```sh
+OPENAI_API_KEY=sk-... bash install.sh   # 可加 --skip-browser、--skip-fonts、--skip-build、--skip-check
+npm start
+```
+
 ## 渲染预览图（render2img）
 
 `render2img` 让智能体把自己写的 OpenUI 程序渲染成 PNG。服务端用无头 Chrome 打开本应用的 `/render` 页面，按聊天中的样式渲染，等图片、字体和图表加载完再截图。图片和解析器发现的问题（未定义的引用、未知组件、被截断的程序、引号外被忽略的字符）一起返回给模型。支持看图的模型会检查图片，不支持的模型只收到问题列表。学习者在工具调用下方看到预览图，可以打开原图或下载。
@@ -50,6 +57,18 @@ npm run dev
 | `LEARNEV_RENDER_ORIGIN` | 截图时访问的应用地址，默认使用当前请求的地址，例如 `http://127.0.0.1:3000` |
 
 浏览器在首次渲染时启动，空闲 60 秒后退出。找不到浏览器时工具返回错误，智能体会继续正常回答。
+
+### 命令行出图
+
+`npm run render` 用同一个页面和同样的检查把 `.oui` 文件渲染成 PNG，供服务器上的其他 Agent 使用，写法和规则见 [AGENT.md](AGENT.md)。
+
+```sh
+npm run render -- card.oui                 # 生成 card.png，宽 480
+npm run render -- report.oui -w 780 --theme dark -o report.png
+```
+
+退出码 0 表示没有问题，2 表示已出图但程序有问题，1 表示渲染失败。没有运行中的服务时，命令会用生产构建临时启动一个，渲染完自动关闭。
+
 ## 配置 Agent
 
 侧栏「设置」打开独立设置页。「智能体」中可以添加或编辑名称、系统提示词、服务、模型、推理强度、回答形式和工具。编辑时可以直接配置当前服务或添加新服务，保存服务后继续编辑智能体。保存后即可在输入框中选择它。每个智能体占用 `agent/` 下的一个子目录，目录名可以随名称生成，也可以自行填写。

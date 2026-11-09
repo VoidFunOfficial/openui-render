@@ -18,6 +18,21 @@ export type RenderResult = {
 export type Renderer = (request: RenderRequest, signal?: AbortSignal) => Promise<RenderResult>;
 type PageReport = { height: number; diagnostics: RenderDiagnostics };
 
+/** One line per problem in a rendered program, worded for whoever fixes the code. */
+export function renderProblems(d: RenderDiagnostics): string[] {
+  return [
+    ...(d.hasProgram ? [] : ["No OpenUI program found: the code must contain a line starting with root ="]),
+    ...(d.crashed ? [`The view crashed while rendering: ${d.crashed}`] : []),
+    ...d.errors.map((e) => (e.statementId ? `${e.statementId}: ${e.message}` : e.message)),
+    ...(d.unresolved.length ? [`Referenced but never defined (rendered as nothing): ${d.unresolved.join(", ")}`] : []),
+    ...(d.orphaned.length ? [`Defined but not reachable from root (not shown): ${d.orphaned.join(", ")}`] : []),
+    ...(d.stray?.length
+      ? [`Skipped by the parser because they are outside quotes: ${d.stray.join(" ")}. Put text in quotes and write names, $state and @functions in ASCII.`]
+      : []),
+    ...(d.incomplete ? ["The program is truncated: a statement or bracket is unfinished."] : []),
+  ];
+}
+
 async function waitForHarness(page: Page, timeoutMs: number) {
   const until = Date.now() + timeoutMs;
   // The first request in `next dev` compiles the page, and hydration follows the load event.

@@ -290,6 +290,24 @@ function browser(): Promise<Browser> {
   return pending;
 }
 
+/** Closes the shared browser and waits until it exits, so a short-lived process does not leave its profile behind. */
+export async function closeBrowser(timeoutMs = 5000) {
+  const pending = host.learnevChrome;
+  if (!pending) return;
+  let instance: Browser;
+  try {
+    instance = await pending;
+  } catch {
+    return;
+  }
+  clearTimeout(instance.idle);
+  const { child, connection } = instance;
+  if (child.exitCode !== null || child.signalCode !== null) return;
+  const exited = new Promise((resolve) => child.once("exit", resolve));
+  connection.send("Browser.close").catch(() => child.kill());
+  await Promise.race([exited, new Promise((resolve) => setTimeout(resolve, timeoutMs).unref())]);
+}
+
 export type Page = {
   send<T = Record<string, unknown>>(method: string, params?: object): Promise<T>;
   /** Evaluates an expression in the page; awaits promises and returns the value as JSON. */
